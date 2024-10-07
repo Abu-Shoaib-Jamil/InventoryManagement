@@ -29,15 +29,15 @@ public class ProductService {
         if(product.isPresent()){
             return product.get();
         }
-//        If not found throw ProductNotFoundException
+//      If not found throw ProductNotFoundException
         throw new ProductNotFoundException("Product Not Found with id : " + pid);
     }
 
     public Product addProduct(Product product){
-//        Check if it already exists. If exist throw Product Already exist exception
+//      Check if it already exists. If exist throw Product Already exist exception
         String pname = product.getName();
         boolean productExist = productRepository.existsByName(pname);
-//      throw Product already exist exception
+//      Throw Product already exist exception
         if(productExist){
             Product p  = productRepository.findByName(pname);
             throw new ProductExistException("Product : " + p.getName() + " already exist with id : " + p.getPid() + ". Duplicate items cannot be added.");
@@ -48,5 +48,42 @@ public class ProductService {
 
         }
     }
+
+    public Product updateProductName(String productName,String newProductName){
+        boolean productIsExist = productRepository.existsByName(productName);
+        if(productIsExist){
+            Product product = productRepository.findByName(productName);
+            product.setName(newProductName);
+            productRepository.save(product);
+            return product;
+        }else{
+            throw new ProductNotFoundException("Product Not Found with name : " + productName + ". Please provide correct product name or add a product with the same name first to update it");
+        }
+    }
+
+    public Product updateProductPrice(String productName,int newProductPrice){
+        boolean productIsExist = productRepository.existsByName(productName);
+        if(productIsExist){
+            Product product = productRepository.findByName(productName);
+            product.setPrice(newProductPrice);
+            productRepository.save(product);
+            return product;
+        }else{
+            throw new ProductNotFoundException("Product Not Found with name : " + productName + ". Please provide correct product name or add a product with the same name first to update it");
+        }
+    }
+
+    public Product updateProductCategory(String productName,String newProductCategory){
+        boolean productIsExist = productRepository.existsByName(productName);
+        if(productIsExist){
+            Product product = productRepository.findByName(productName);
+            product.setCategory(newProductCategory);
+            productRepository.save(product);
+            return product;
+        }else{
+            throw new ProductNotFoundException("Product Not Found with name : " + productName + ". Please provide correct product name or add a product with the same name first to update it");
+        }
+    }
+
 
 }
