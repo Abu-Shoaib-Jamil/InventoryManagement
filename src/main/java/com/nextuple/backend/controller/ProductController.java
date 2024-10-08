@@ -35,7 +35,7 @@ public class ProductController {
         return new ResponseEntity<>(product,HttpStatus.FOUND);
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody Product product){
         Product savedProduct = productService.addProduct(product);
         return new ResponseEntity<>(savedProduct,HttpStatus.CREATED);
@@ -65,7 +65,16 @@ public class ProductController {
         return new ResponseEntity<>(product,HttpStatus.OK);
     }
 
+    @DeleteMapping("/name/{productName}")
+    public ResponseEntity<Product> deleteProductByName(@PathVariable String productName){
+        Product product = productService.deleteProductByName(productName);
+        return new ResponseEntity<>(product,HttpStatus.OK);
+    }
 
-
+    @DeleteMapping("/id/{productId}")
+    public ResponseEntity<Product> deleteProductById(@PathVariable String productId){
+        Product product = productService.deleteProductByID(productId);
+        return new ResponseEntity<>(product,HttpStatus.OK);
+    }
 
 }
