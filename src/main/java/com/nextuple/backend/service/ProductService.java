@@ -1,8 +1,10 @@
 package com.nextuple.backend.service;
 
+import com.nextuple.backend.entity.Inventory;
 import com.nextuple.backend.entity.Product;
 import com.nextuple.backend.exception.ProductExistException;
 import com.nextuple.backend.exception.ProductNotFoundException;
+import com.nextuple.backend.repository.InventoryRepository;
 import com.nextuple.backend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,12 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final InventoryRepository inventoryRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository){
+    public ProductService(ProductRepository productRepository,InventoryRepository inventoryRepository){
         this.productRepository = productRepository;
+        this.inventoryRepository = inventoryRepository;
     }
 
     public List<Product> findAllProduct(){
@@ -41,8 +45,9 @@ public class ProductService {
             throw new ProductExistException("Product : " + p.getName() + " already exist with id : " + p.getPid() + ". Duplicate items cannot be added.");
         }else{
             productRepository.save(product);
+            inventoryRepository.save(new Inventory(product,0));
+//            inventoryRepository.save(new Inventory(product.getPid(),0));
             return product;
-
         }
     }
 

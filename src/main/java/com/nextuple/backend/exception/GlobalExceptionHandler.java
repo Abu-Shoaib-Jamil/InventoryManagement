@@ -18,4 +18,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(productExistException.getMessage(),HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<String> handleInventoryNotFoundException(InventoryNotFoundException inventoryNotFoundException){
+        return new ResponseEntity<>(inventoryNotFoundException.getMessage(),HttpStatus.BAD_REQUEST);
+    }
+
 }
