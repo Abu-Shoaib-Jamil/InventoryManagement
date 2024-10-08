@@ -23,4 +23,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(inventoryNotFoundException.getMessage(),HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<String> handleInvalidInventoryQuantityException(InvalidInventoryQuantityException invalidInventoryQuantityException){
+        return new ResponseEntity<>(invalidInventoryQuantityException.getMessage(),HttpStatus.BAD_REQUEST);
+    }
+
 }

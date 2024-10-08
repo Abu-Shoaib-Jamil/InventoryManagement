@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface InventoryRepository extends MongoRepository<Inventory,String> {
     public Inventory findByProduct(Product product);
     public boolean existsByProduct(Product product);
-    public Inventory deleteByProduct(Product product);
+    public void deleteByProduct(Product product);
 }

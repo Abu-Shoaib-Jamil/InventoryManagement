@@ -2,6 +2,7 @@ package com.nextuple.backend.service;
 
 import com.nextuple.backend.entity.Inventory;
 import com.nextuple.backend.entity.Product;
+import com.nextuple.backend.exception.InvalidInventoryQuantityException;
 import com.nextuple.backend.exception.InventoryNotFoundException;
 import com.nextuple.backend.exception.ProductExistException;
 import com.nextuple.backend.exception.ProductNotFoundException;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class InventoryService {
@@ -62,10 +62,54 @@ public class InventoryService {
         }
     }
 
+    public Inventory increaseInventory(String productName,int newQty){
+        boolean productIsExist = productRepository.existsByName(productName);
+        if(!productIsExist){
+            throw new ProductNotFoundException("Product with name : " + productName + " not found in the available product list");
+        }else{
+            Product product = productRepository.findByName(productName);
+            boolean inventoryIsExist = inventoryRepository.existsByProduct(product);
+            Inventory inventory;
+            if(!inventoryIsExist){
+                inventory = new Inventory(product,newQty);
+                inventoryRepository.save(inventory);
+                return inventory;
+            }else{
+                inventory = inventoryRepository.findByProduct(product);
+                inventory.setQty(inventory.getQty()+newQty);
+                inventoryRepository.save(inventory);
+            }
+            return inventory;
+        }
+    }
+
+    public Inventory decreaseInventory(String productName,int newQty){
+        boolean productIsExist = productRepository.existsByName(productName);
+        if(!productIsExist){
+            throw new ProductNotFoundException("Product with name : " + productName + " not found in the available product list");
+        }else{
+            Product product = productRepository.findByName(productName);
+            boolean inventoryIsExist = inventoryRepository.existsByProduct(product);
+            if(!inventoryIsExist){
+                throw new InventoryNotFoundException("Inventory for product : " + product.getName() + " not found");
+            }else{
+                Inventory inventory = inventoryRepository.findByProduct(product);
+                int qty = inventory.getQty();
+                if(qty-newQty<0){
+                    throw new InvalidInventoryQuantityException(qty + " - " + newQty + " = " + (qty-newQty) + ".Product Inventory cannot be negative");
+                }else{
+                    inventory.setQty(inventory.getQty()-newQty);
+                    inventoryRepository.save(inventory);
+                    return inventory;
+                }
+            }
+        }
+    }
+
     public void deleteInventory(String productName){
         boolean productIsExist = productRepository.existsByName(productName);
         if(!productIsExist){
-            throw new ProductNotFoundException("Product with name : " + productName + " not found in the available product list. Please add the product in to inventory first in order to delete it");
+            throw new ProductNotFoundException("Product with name : " + productName + " not found in the available product list");
         }else{
             Product product = productRepository.findByName(productName);
             boolean inventoryIsExist = inventoryRepository.existsByProduct(product);
