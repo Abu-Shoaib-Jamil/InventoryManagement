@@ -92,6 +92,10 @@ public class ProductService {
         if(productIsExist){
             Product toBeDeletedProduct = productRepository.findByName(productName);
             productRepository.deleteById(toBeDeletedProduct.getPid());
+            boolean inventoryIsExist = inventoryRepository.existsByProduct(toBeDeletedProduct);
+            if(inventoryIsExist){
+                inventoryRepository.deleteByProduct(toBeDeletedProduct);
+            }
             return toBeDeletedProduct;
         }else{
             throw new ProductNotFoundException("Product Not Found with name : " + productName + ". Please provide correct product name or add a product with the same name first to delete it");
@@ -101,7 +105,12 @@ public class ProductService {
     public Product deleteProductByID(String productId){
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if(optionalProduct.isPresent()){
+            Product product = optionalProduct.get();
             productRepository.deleteById(productId);
+            boolean inventoryIsExist = inventoryRepository.existsByProduct(product);
+            if(inventoryIsExist){
+                inventoryRepository.deleteByProduct(product);
+            }
             return optionalProduct.get();
         }else{
             throw new ProductNotFoundException("Product Not Found with id : " + productId + ". Please provide correct product id or add a product with the same id first to delete it");
