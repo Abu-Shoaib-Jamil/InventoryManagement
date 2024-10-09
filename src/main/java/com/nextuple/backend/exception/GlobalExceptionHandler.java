@@ -28,4 +28,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(invalidInventoryQuantityException.getMessage(),HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<String> handleOrderNotFoundException(OrderNotFoundException orderNotFoundException){
+        return new ResponseEntity<>(orderNotFoundException.getMessage(),HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleInsufficientStockException(InsufficientStockException insufficientStockException){
+        return new ResponseEntity<>(insufficientStockException.getMessage(),HttpStatus.BAD_REQUEST);
+    }
+
 }
