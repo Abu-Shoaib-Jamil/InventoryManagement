@@ -1,42 +1,20 @@
 package com.nextuple.backend.dto;
 
 import com.nextuple.backend.entity.Product;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
+@Data
+@RequiredArgsConstructor
 public class OrderWrapper {
 
+    @NonNull
     private Product product;
+    @NonNull
     private int qty;
+    @NonNull
+    private String orderType;
 
-//    Constructors
-    public OrderWrapper(){}
-    public OrderWrapper(Product product,int qty){
-        this.product = product;
-        this.qty = qty;
-    }
-
-//    Getters
-    public Product getProduct(){
-        return this.product;
-    }
-    public int getQty(){
-        return this.qty;
-    }
-
-//    Setters
-    public void setQty(int qty) {
-        this.qty = qty;
-    }
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-//    To String Method
-
-    @Override
-    public String toString() {
-        return "OrderWrapper{" +
-                "product=" + this.product +
-                ", qty=" + this.qty +
-                '}';
-    }
 }

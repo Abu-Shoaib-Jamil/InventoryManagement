@@ -41,39 +41,15 @@ public class ProductController {
         return new ResponseEntity<>(savedProduct,HttpStatus.CREATED);
     }
 
-    @PutMapping("/name")
-    public ResponseEntity<Product> updateProductName(@RequestBody Map<String,String> body){
-        String productName = body.get("productName");
-        String newProductName = body.get("newProductName");
-        Product product = productService.updateProductName(productName,newProductName);
-        return new ResponseEntity<>(product,HttpStatus.OK);
+    @PutMapping
+    public ResponseEntity<Product> updateProduct(@RequestBody Product product){
+        Product p = productService.updateProduct(product);
+        return new ResponseEntity<>(p,HttpStatus.CREATED);
     }
 
-    @PutMapping("/price")
-    public ResponseEntity<Product> updateProductPrice(@RequestBody Map<String,Object> body){
-        String productName = (String) body.get("productName");
-        int newProductPrice = (int) body.get("newProductPrice");
-        Product product = productService.updateProductPrice(productName,newProductPrice);
-        return new ResponseEntity<>(product,HttpStatus.OK);
-    }
-
-    @PutMapping("/category")
-    public ResponseEntity<Product> updateProductCategory(@RequestBody Map<String,String> body){
-        String productName = body.get("productName");
-        String newProductCategory = body.get("newProductCategory");
-        Product product = productService.updateProductCategory(productName,newProductCategory);
-        return new ResponseEntity<>(product,HttpStatus.OK);
-    }
-
-    @DeleteMapping("/name/{productName}")
+    @DeleteMapping("{productName}")
     public ResponseEntity<Product> deleteProductByName(@PathVariable String productName){
-        Product product = productService.deleteProductByName(productName);
-        return new ResponseEntity<>(product,HttpStatus.OK);
-    }
-
-    @DeleteMapping("/id/{productId}")
-    public ResponseEntity<Product> deleteProductById(@PathVariable String productId){
-        Product product = productService.deleteProductByID(productId);
+        Product product = productService.deleteProduct(productName);
         return new ResponseEntity<>(product,HttpStatus.OK);
     }
 

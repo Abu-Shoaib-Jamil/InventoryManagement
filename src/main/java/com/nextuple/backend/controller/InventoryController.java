@@ -41,19 +41,12 @@ public class InventoryController {
         return new ResponseEntity<>(inventory,HttpStatus.CREATED);
     }
 
-    @PutMapping("/add")
-    public ResponseEntity<Inventory> addQuantity(@RequestBody Map<String,Object> body){
+    @PutMapping()
+    public ResponseEntity<Inventory> updateInventory(@RequestBody Map<String,Object> body){
         String productName = (String) body.get("productName");
         int newQty = (int) body.get("newQty");
-        Inventory inventory = inventoryService.increaseInventory(productName,newQty);
-        return new ResponseEntity<>(inventory,HttpStatus.CREATED);
-    }
-
-    @PutMapping("/subtract")
-    public ResponseEntity<Inventory> subtractQuantity(@RequestBody Map<String,Object> body){
-        String productName = (String) body.get("productName");
-        int newQty = (int) body.get("newQty");
-        Inventory inventory = inventoryService.decreaseInventory(productName,newQty);
+        String operationType = (String) body.get("operationType");
+        Inventory inventory = inventoryService.updateInventory(productName,newQty,operationType);
         return new ResponseEntity<>(inventory,HttpStatus.CREATED);
     }
 

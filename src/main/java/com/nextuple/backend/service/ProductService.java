@@ -46,48 +46,32 @@ public class ProductService {
         }else{
             productRepository.save(product);
             inventoryRepository.save(new Inventory(product,0));
-//            inventoryRepository.save(new Inventory(product.getPid(),0));
             return product;
         }
     }
 
-    public Product updateProductName(String productName,String newProductName){
+    public Product updateProduct(Product product){
+        String productName = product.getName();
         boolean productIsExist = productRepository.existsByName(productName);
         if(productIsExist){
-            Product product = productRepository.findByName(productName);
-            product.setName(newProductName);
-            productRepository.save(product);
-            return product;
+            Product oldProduct = productRepository.findByName(productName);
+            if(product.getName()!=null && !product.getName().equals(oldProduct.getName())){
+                oldProduct.setName(product.getName());
+            }
+            if(product.getCategory()!=null && !product.getCategory().equals(oldProduct.getCategory())){
+                oldProduct.setCategory(product.getCategory());
+            }
+            if(product.getPrice()!=oldProduct.getPrice()){
+                oldProduct.setPrice(product.getPrice());
+            }
+            productRepository.save(oldProduct);
+            return oldProduct;
         }else{
             throw new ProductNotFoundException("Product Not Found with name : " + productName + ". Please provide correct product name or add a product with the same name first to update it");
         }
     }
 
-    public Product updateProductPrice(String productName,int newProductPrice){
-        boolean productIsExist = productRepository.existsByName(productName);
-        if(productIsExist){
-            Product product = productRepository.findByName(productName);
-            product.setPrice(newProductPrice);
-            productRepository.save(product);
-            return product;
-        }else{
-            throw new ProductNotFoundException("Product Not Found with name : " + productName + ". Please provide correct product name or add a product with the same name first to update it");
-        }
-    }
-
-    public Product updateProductCategory(String productName,String newProductCategory){
-        boolean productIsExist = productRepository.existsByName(productName);
-        if(productIsExist){
-            Product product = productRepository.findByName(productName);
-            product.setCategory(newProductCategory);
-            productRepository.save(product);
-            return product;
-        }else{
-            throw new ProductNotFoundException("Product Not Found with name : " + productName + ". Please provide correct product name or add a product with the same name first to update it");
-        }
-    }
-
-    public Product deleteProductByName(String productName){
+    public Product deleteProduct(String productName){
         boolean productIsExist = productRepository.existsByName(productName);
         if(productIsExist){
             Product toBeDeletedProduct = productRepository.findByName(productName);
@@ -101,20 +85,4 @@ public class ProductService {
             throw new ProductNotFoundException("Product Not Found with name : " + productName + ". Please provide correct product name or add a product with the same name first to delete it");
         }
     }
-
-    public Product deleteProductByID(String productId){
-        Optional<Product> optionalProduct = productRepository.findById(productId);
-        if(optionalProduct.isPresent()){
-            Product product = optionalProduct.get();
-            productRepository.deleteById(productId);
-            boolean inventoryIsExist = inventoryRepository.existsByProduct(product);
-            if(inventoryIsExist){
-                inventoryRepository.deleteByProduct(product);
-            }
-            return optionalProduct.get();
-        }else{
-            throw new ProductNotFoundException("Product Not Found with id : " + productId + ". Please provide correct product id or add a product with the same id first to delete it");
-        }
-    }
-
 }

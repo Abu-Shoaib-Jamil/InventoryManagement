@@ -33,15 +33,21 @@ public class OrderController {
         return new ResponseEntity<>(order, HttpStatus.FOUND);
     }
 
-    @PostMapping("/purchase")
-    public ResponseEntity<HttpStatus> handlePurchaseOrder(@RequestBody List<OrderWrapper> orders){
-        orderService.placePurchaseOrder(orders);
+    @PostMapping()
+    public ResponseEntity<HttpStatus> handleOrder(@RequestBody List<OrderWrapper> orders){
+        orderService.placeOrder(orders);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    @PostMapping("/sell")
-    public ResponseEntity<HttpStatus> handleSellOrder(@RequestBody List<OrderWrapper> orders){
-        orderService.placeSellOrder(orders);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
+
+//    @PostMapping("/purchase")
+//    public ResponseEntity<HttpStatus> handlePurchaseOrder(@RequestBody List<OrderWrapper> orders){
+//        orderService.placePurchaseOrder(orders);
+//        return new ResponseEntity<>(HttpStatus.CREATED);
+//    }
+//    @PostMapping("/sell")
+//    public ResponseEntity<HttpStatus> handleSellOrder(@RequestBody List<OrderWrapper> orders){
+//        orderService.placeSellOrder(orders);
+//        return new ResponseEntity<>(HttpStatus.CREATED);
+//    }
 
 }
